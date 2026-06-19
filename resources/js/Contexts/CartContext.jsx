@@ -6,7 +6,13 @@ export function CartProvider({ children }) {
     const [items, setItems] = useState(() => {
         if (typeof window !== 'undefined') {
             const saved = localStorage.getItem('balailelang_cart');
-            return saved ? JSON.parse(saved) : [];
+            if (saved && saved !== 'undefined') {
+                try {
+                    return JSON.parse(saved) || [];
+                } catch (e) {
+                    return [];
+                }
+            }
         }
         return [];
     });
