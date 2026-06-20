@@ -15,16 +15,24 @@ class ProductController extends Controller
             ->where('is_active', true);
 
         // Filter by category
-        if ($request->has('category')) {
+        if ($request->has('category') && $request->category) {
             $query->whereHas('category', function ($q) use ($request) {
-                $q->where('slug', $request->category);
+                if (is_numeric($request->category)) {
+                    $q->where('id', $request->category);
+                } else {
+                    $q->where('slug', $request->category);
+                }
             });
         }
 
         // Filter by subcategory
-        if ($request->has('subcategory')) {
+        if ($request->has('subcategory') && $request->subcategory) {
             $query->whereHas('subcategory', function ($q) use ($request) {
-                $q->where('slug', $request->subcategory);
+                if (is_numeric($request->subcategory)) {
+                    $q->where('id', $request->subcategory);
+                } else {
+                    $q->where('slug', $request->subcategory);
+                }
             });
         }
 
@@ -33,12 +41,22 @@ class ProductController extends Controller
             $query->where('title', 'like', '%' . $request->search . '%');
         }
 
+        // Filter by status
+        if ($request->has('status')) {
+            if ($request->status === 'available') {
+                $query->where('stock', '>', 0);
+            } elseif ($request->status === 'sold') {
+                $query->where('stock', '<=','0');
+            }
+        }
+
         // Sort
         $sort = $request->get('sort', 'latest');
         match ($sort) {
-            'price_asc' => $query->orderBy('price', 'asc'),
-            'price_desc' => $query->orderBy('price', 'desc'),
-            'name' => $query->orderBy('title', 'asc'),
+            'price_low', 'price_asc' => $query->orderBy('price', 'asc'),
+            'price_high', 'price_desc' => $query->orderBy('price', 'desc'),
+            'name_az', 'name' => $query->orderBy('title', 'asc'),
+            'name_za' => $query->orderBy('title', 'desc'),
             default => $query->orderByDesc('created_at'),
         };
 
@@ -48,7 +66,7 @@ class ProductController extends Controller
         return Inertia::render('Product/Index', [
             'products' => $products,
             'categories' => $categories,
-            'filters' => $request->only(['category', 'subcategory', 'search', 'sort']),
+            'filters' => $request->only(['category', 'subcategory', 'search', 'sort', 'status']),
         ]);
     }
 

@@ -11,6 +11,12 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
 
+        @php
+            $favicon = \App\Models\Setting::where('key', 'logo_path')->value('value') ?? '/uploads/logos/logo.png';
+        @endphp
+        <link rel="icon" href="{{ $favicon }}" sizes="any">
+        <link rel="apple-touch-icon" href="{{ $favicon }}">
+
         <!-- Scripts -->
         @viteReactRefresh
         @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])

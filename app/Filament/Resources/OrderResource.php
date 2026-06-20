@@ -70,6 +70,7 @@ class OrderResource extends Resource
                         Forms\Components\Select::make('status')
                             ->options([
                                 'pending' => 'Menunggu Pembayaran',
+                                'payment_verifying' => 'Verifikasi Pembayaran',
                                 'processing' => 'Diproses',
                                 'shipped' => 'Dikirim',
                                 'completed' => 'Selesai',
@@ -85,6 +86,15 @@ class OrderResource extends Resource
                             ->label('Metode Pembayaran')
                             ->required()
                             ->maxLength(255),
+                    ]),
+                    
+                    Forms\Components\Section::make('Bukti Pembayaran')->schema([
+                        Forms\Components\FileUpload::make('payment_proof')
+                            ->label('File Bukti')
+                            ->image()
+                            ->directory('proofs')
+                            ->visibility('public')
+                            ->columnSpanFull(),
                     ]),
                     
                     Forms\Components\Section::make('Catatan')->schema([
@@ -117,6 +127,7 @@ class OrderResource extends Resource
                 Tables\Columns\SelectColumn::make('status')
                     ->options([
                         'pending' => 'Menunggu Pembayaran',
+                        'payment_verifying' => 'Verifikasi Pembayaran',
                         'processing' => 'Diproses',
                         'shipped' => 'Dikirim',
                         'completed' => 'Selesai',
@@ -127,11 +138,15 @@ class OrderResource extends Resource
                     ->label('Tanggal')
                     ->dateTime()
                     ->sortable(),
+                Tables\Columns\ImageColumn::make('payment_proof')
+                    ->label('Bukti')
+                    ->square(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
                         'pending' => 'Menunggu Pembayaran',
+                        'payment_verifying' => 'Verifikasi Pembayaran',
                         'processing' => 'Diproses',
                         'shipped' => 'Dikirim',
                         'completed' => 'Selesai',

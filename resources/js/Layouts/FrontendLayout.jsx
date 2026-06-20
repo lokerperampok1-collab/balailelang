@@ -36,131 +36,143 @@ export default function FrontendLayout({ children }) {
             </div>
 
             {/* Navbar */}
-            <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm">
-                <div className="container mx-auto px-4">
-                    <div className="flex items-center justify-between h-16">
-                        {/* Logo */}
-                        <Link href="/" className="flex items-center gap-3 shrink-0">
-                            <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-amber-700 rounded-xl flex items-center justify-center shadow-lg shadow-amber-500/20">
-                                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
-                                </svg>
-                            </div>
-                            <span className="text-lg font-bold text-gray-900 hidden sm:block">{websiteName}</span>
+            <header className="sticky top-0 z-50 shadow-lg">
+                <div className="absolute inset-0 z-0 overflow-hidden">
+                    <svg className="h-full w-full" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" preserveAspectRatio="none">
+                        <defs>
+                            <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0%" stopColor="#0b1f3a" />
+                                <stop offset="50%" stopColor="#0f2f5c" />
+                                <stop offset="100%" stopColor="#081426" />
+                            </linearGradient>
+                            <radialGradient id="glow1">
+                                <stop offset="0%" stopColor="#2f6bff" stopOpacity="0.6" />
+                                <stop offset="100%" stopColor="#2f6bff" stopOpacity="0" />
+                            </radialGradient>
+                            <radialGradient id="glow2">
+                                <stop offset="0%" stopColor="#4cc9ff" stopOpacity="0.5" />
+                                <stop offset="100%" stopColor="#4cc9ff" stopOpacity="0" />
+                            </radialGradient>
+                        </defs>
+                        <rect width="1920" height="1080" fill="url(#bg)" />
+                        <circle cx="1400" cy="200" r="400" fill="url(#glow1)" />
+                        <circle cx="500" cy="900" r="350" fill="url(#glow2)" />
+                        <path d="M0 750 Q480 650 960 760 T1920 720 L1920 1080 L0 1080 Z" fill="#1c3f75" opacity="0.35" />
+                        <path d="M0 820 Q600 700 1200 820 T1920 780 L1920 1080 L0 1080 Z" fill="#2a5aa8" opacity="0.25" />
+                    </svg>
+                </div>
+                <div className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+                    <Link href="/">
+                        <img alt={websiteName} className="h-12 sm:h-[72px] w-auto rounded-lg shadow-sm object-contain" src={settings?.logo_path || '/uploads/logos/logo.png'} />
+                    </Link>
+                    <nav className="hidden items-center gap-5 text-sm md:flex">
+                        <Link className="text-blue-100 transition hover:text-yellow-400" aria-label="Beranda" href="/">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-house h-4.5 w-4.5">
+                                <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />
+                                <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                            </svg>
                         </Link>
-
-                        {/* Desktop Search */}
-                        <form onSubmit={handleSearch} className="hidden md:flex flex-1 max-w-md mx-8">
-                            <div className="relative w-full">
-                                <input
-                                    type="text"
-                                    value={searchQuery}
-                                    onChange={e => setSearchQuery(e.target.value)}
-                                    placeholder="Cari produk lelang..."
-                                    className="w-full pl-4 pr-10 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:bg-white transition-all"
-                                />
-                                <button type="submit" className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-amber-600">
-                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </form>
-
-                        {/* Desktop Nav */}
-                        <nav className="hidden md:flex items-center gap-1">
-                            <Link href="/" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-amber-700 rounded-lg hover:bg-amber-50 transition-colors">
-                                Beranda
-                            </Link>
-                            <Link href="/produk" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-amber-700 rounded-lg hover:bg-amber-50 transition-colors">
+                        <div className="group relative">
+                            <button className="flex items-center gap-1 text-blue-100 transition hover:font-semibold hover:text-yellow-400">
                                 Produk
-                            </Link>
-                            <Link href="/blog" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-amber-700 rounded-lg hover:bg-amber-50 transition-colors">
-                                Blog
-                            </Link>
-                        </nav>
-
-                        {/* Actions */}
-                        <div className="flex items-center gap-2">
-                            {/* Mobile search toggle */}
-                            <button onClick={() => setSearchOpen(!searchOpen)} className="md:hidden p-2 text-gray-600 hover:text-amber-600 rounded-lg hover:bg-gray-100">
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                <svg className="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </button>
-
-                            {/* Cart */}
-                            <button
-                                onClick={() => setIsCartOpen(!isCartOpen)}
-                                className="relative p-2 text-gray-600 hover:text-amber-600 rounded-lg hover:bg-gray-100 transition-colors"
-                            >
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
-                                </svg>
-                                {totalItems > 0 && (
-                                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center animate-bounce">
-                                        {totalItems}
-                                    </span>
-                                )}
-                            </button>
-
-                            {/* Auth */}
-                            {auth?.user ? (
-                                <Link href="/dashboard" className="hidden sm:flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 hover:text-amber-700 rounded-lg hover:bg-amber-50">
-                                    <div className="w-7 h-7 bg-amber-100 rounded-full flex items-center justify-center">
-                                        <span className="text-amber-700 text-xs font-bold">{auth.user.name.charAt(0).toUpperCase()}</span>
-                                    </div>
-                                    <span>{auth.user.name}</span>
-                                </Link>
-                            ) : (
-                                <Link href="/login" className="hidden sm:block px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-sm font-semibold rounded-xl hover:from-amber-600 hover:to-amber-700 shadow-lg shadow-amber-500/25 transition-all hover:shadow-amber-500/40">
-                                    Login
-                                </Link>
-                            )}
-
-                            {/* Mobile menu */}
-                            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 text-gray-600 hover:text-amber-600 rounded-lg hover:bg-gray-100">
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                                    {mobileMenuOpen ? (
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-                                    ) : (
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                                    )}
-                                </svg>
-                            </button>
+                            <div className="pointer-events-none absolute top-full left-1/2 w-48 -translate-x-1/2 pt-2 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100">
+                                <div className="rounded-xl border border-white/10 py-1 shadow-xl" style={{ background: 'linear-gradient(135deg, rgb(11, 31, 58) 0%, rgb(15, 47, 92) 100%)' }}>
+                                    <Link className="block px-4 py-2.5 text-sm text-blue-100 transition hover:bg-white/10 hover:text-yellow-400" href="/products">Semua Produk</Link>
+                                    <Link className="block px-4 py-2.5 text-sm text-blue-100 transition hover:bg-white/10 hover:text-yellow-400" href="/products?status=available">Produk Tersedia</Link>
+                                    <Link className="block px-4 py-2.5 text-sm text-blue-100 transition hover:bg-white/10 hover:text-yellow-400" href="/products?status=sold">Produk Terjual</Link>
+                                </div>
+                            </div>
                         </div>
+                        <div className="group relative">
+                            <button className="flex items-center gap-1 text-blue-100 transition hover:font-semibold hover:text-yellow-400">
+                                Pesanan
+                                <svg className="h-3.5 w-3.5 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                            <div className="pointer-events-none absolute top-full left-1/2 w-52 -translate-x-1/2 pt-2 opacity-0 transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100">
+                                <div className="rounded-xl border border-white/10 py-1 shadow-xl" style={{ background: 'linear-gradient(135deg, rgb(11, 31, 58) 0%, rgb(15, 47, 92) 100%)' }}>
+                                    <Link className="block px-4 py-2.5 text-sm text-blue-100 transition hover:bg-white/10 hover:text-yellow-400" href="/checkout">Pesanan</Link>
+                                    <Link className="block px-4 py-2.5 text-sm text-blue-100 transition hover:bg-white/10 hover:text-yellow-400" href="/track">Lacak Pengiriman</Link>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="/#telegram-section" className="text-blue-100 transition hover:font-semibold hover:text-yellow-400">Pemesanan via Telegram</a>
+                    </nav>
+                    <div className="flex items-center gap-2">
+                        <button onClick={() => setSearchOpen(!searchOpen)} className="rounded-full p-2 transition hover:bg-white/10" aria-label="Cari Produk">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-search h-5 w-5 text-blue-100">
+                                <circle cx="11" cy="11" r="8" />
+                                <path d="m21 21-4.3-4.3" />
+                            </svg>
+                        </button>
+                        <button onClick={() => setIsCartOpen(!isCartOpen)} className="relative rounded-full p-2 transition hover:bg-white/10" aria-label="Keranjang">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-shopping-cart h-5 w-5 text-blue-100">
+                                <circle cx="8" cy="21" r="1" />
+                                <circle cx="19" cy="21" r="1" />
+                                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                            </svg>
+                            {totalItems > 0 && (
+                                <span className="absolute top-0 right-0 w-4 h-4 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse">
+                                    {totalItems}
+                                </span>
+                            )}
+                        </button>
+                        {auth?.user ? (
+                            <Link href="/dashboard" className="hidden md:flex items-center gap-2 px-3 py-2 text-sm font-medium text-blue-100 transition hover:bg-white/10 hover:text-yellow-400 rounded-lg">
+                                <span>{auth.user.name}</span>
+                            </Link>
+                        ) : (
+                            <div className="ml-2 hidden items-center gap-2 md:flex">
+                                <Link className="rounded px-4 py-2 text-sm font-medium text-blue-100 transition hover:bg-white/10 hover:text-yellow-400" href="/login">Masuk</Link>
+                                <Link className="rounded bg-yellow-400 px-4 py-2 text-sm font-semibold text-[#0b1f3a] transition hover:bg-yellow-300" href="/register">Buat Akun Baru</Link>
+                            </div>
+                        )}
+                        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="rounded-full p-2 transition hover:bg-white/10 md:hidden">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-menu h-5 w-5 text-blue-100">
+                                <line x1="4" x2="20" y1="12" y2="12" />
+                                <line x1="4" x2="20" y1="6" y2="6" />
+                                <line x1="4" x2="20" y1="18" y2="18" />
+                            </svg>
+                        </button>
                     </div>
-
-                    {/* Mobile search bar */}
-                    {searchOpen && (
-                        <div className="md:hidden pb-3">
+                </div>
+                {searchOpen && (
+                    <div className="bg-[#0f2f5c] border-t border-white/10 py-3">
+                        <div className="container mx-auto px-4">
                             <form onSubmit={handleSearch}>
                                 <input
                                     type="text"
                                     value={searchQuery}
                                     onChange={e => setSearchQuery(e.target.value)}
                                     placeholder="Cari produk lelang..."
-                                    className="w-full px-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-amber-500"
+                                    className="w-full px-4 py-2.5 bg-white/10 border border-white/20 rounded-xl text-sm text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-yellow-400"
                                     autoFocus
                                 />
                             </form>
                         </div>
-                    )}
-
-                    {/* Mobile menu */}
-                    {mobileMenuOpen && (
-                        <div className="md:hidden pb-4 border-t border-gray-100 pt-3">
-                            <nav className="flex flex-col gap-1">
-                                <Link href="/" className="px-3 py-2.5 text-sm font-medium text-gray-700 hover:text-amber-700 rounded-lg hover:bg-amber-50">Beranda</Link>
-                                <Link href="/produk" className="px-3 py-2.5 text-sm font-medium text-gray-700 hover:text-amber-700 rounded-lg hover:bg-amber-50">Produk</Link>
-                                <Link href="/blog" className="px-3 py-2.5 text-sm font-medium text-gray-700 hover:text-amber-700 rounded-lg hover:bg-amber-50">Blog</Link>
-                                {!auth?.user && (
-                                    <Link href="/login" className="mt-2 px-4 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-sm font-semibold rounded-xl text-center">Login</Link>
-                                )}
-                            </nav>
-                        </div>
-                    )}
-                </div>
+                    </div>
+                )}
+                {mobileMenuOpen && (
+                    <div className="md:hidden bg-[#0f2f5c] border-t border-white/10 py-3 px-4 space-y-2">
+                        <Link href="/" className="block py-2 text-sm text-blue-100 hover:text-yellow-400">Beranda</Link>
+                        <Link href="/products" className="block py-2 text-sm text-blue-100 hover:text-yellow-400">Semua Produk</Link>
+                        <Link href="/products?status=available" className="block py-2 text-sm text-blue-100 hover:text-yellow-400">Produk Tersedia</Link>
+                        <Link href="/products?status=sold" className="block py-2 text-sm text-blue-100 hover:text-yellow-400">Produk Terjual</Link>
+                        <Link href="/track" className="block py-2 text-sm text-blue-100 hover:text-yellow-400">Lacak Pengiriman</Link>
+                        <a href="/#telegram-section" className="block py-2 text-sm text-blue-100 hover:text-yellow-400">Pemesanan via Telegram</a>
+                        {!auth?.user && (
+                            <div className="flex gap-2 pt-2 border-t border-white/10">
+                                <Link className="flex-1 text-center py-2 text-sm font-medium text-blue-100 border border-white/20 rounded-lg hover:bg-white/10" href="/login">Masuk</Link>
+                                <Link className="flex-1 text-center py-2 text-sm font-semibold bg-yellow-400 text-[#0b1f3a] rounded-lg hover:bg-yellow-300" href="/register">Daftar</Link>
+                            </div>
+                        )}
+                    </div>
+                )}
             </header>
 
             {/* Cart Drawer */}
@@ -219,7 +231,7 @@ export default function FrontendLayout({ children }) {
                                     onClick={() => setIsCartOpen(false)}
                                     className="block w-full py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white text-center font-semibold rounded-xl hover:from-emerald-600 hover:to-emerald-700 shadow-lg shadow-emerald-500/25 transition-all"
                                 >
-                                    Checkout via WhatsApp
+                                    Checkout
                                 </Link>
                             </div>
                         )}
@@ -233,66 +245,71 @@ export default function FrontendLayout({ children }) {
             </main>
 
             {/* Footer */}
-            <footer className="bg-gray-900 text-gray-300">
-                <div className="container mx-auto px-4 py-12">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                        {/* About */}
+            <footer className="mt-auto w-full bg-gradient-to-br from-sky-900 to-sky-800 text-white">
+                <div className="mx-auto max-w-7xl px-4 py-12">
+                    <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
                         <div>
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="w-10 h-10 bg-gradient-to-br from-amber-500 to-amber-700 rounded-xl flex items-center justify-center">
-                                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
-                                    </svg>
-                                </div>
-                                <span className="text-white font-bold text-lg">{websiteName}</span>
-                            </div>
-                            <p className="text-sm text-gray-400 leading-relaxed">{footerAbout}</p>
+                            <h3 className="mb-4 text-lg font-bold text-sky-300">Tentang Kami</h3>
+                            <p className="text-sm leading-relaxed text-sky-100">{footerAbout}</p>
                         </div>
-
-                        {/* Quick Links */}
                         <div>
-                            <h3 className="text-white font-semibold mb-4">Menu</h3>
+                            <h3 className="mb-4 text-lg font-bold text-sky-300">Menu</h3>
                             <ul className="space-y-2 text-sm">
-                                <li><Link href="/" className="hover:text-amber-400 transition-colors">Beranda</Link></li>
-                                <li><Link href="/produk" className="hover:text-amber-400 transition-colors">Produk Lelang</Link></li>
-                                <li><Link href="/blog" className="hover:text-amber-400 transition-colors">Blog & Berita</Link></li>
+                                <li><Link className="text-sky-100 transition hover:text-sky-300" href="/">Beranda</Link></li>
+                                <li><Link className="text-sky-100 transition hover:text-sky-300" href="/products">Produk</Link></li>
+                                <li><Link className="text-sky-100 transition hover:text-sky-300" href="/track">Lacak Pesanan</Link></li>
                             </ul>
                         </div>
-
-                        {/* Contact */}
                         <div>
-                            <h3 className="text-white font-semibold mb-4">Hubungi Kami</h3>
+                            <h3 className="mb-4 text-lg font-bold text-sky-300">Hubungi Kami</h3>
                             <ul className="space-y-3 text-sm">
-                                <li className="flex items-center gap-2">
-                                    <svg className="w-4 h-4 text-emerald-400 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                                <li className="flex items-start gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-phone h-4 w-4 shrink-0 text-sky-300">
+                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                                     </svg>
-                                    <a href={`https://wa.me/${whatsappNumber}`} target="_blank" className="hover:text-emerald-400 transition-colors">
-                                        +{whatsappNumber}
+                                    <a href={`https://wa.me/${whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="text-sky-100 transition hover:text-sky-300">
+                                        {whatsappNumber}
                                     </a>
                                 </li>
                                 {supportEmail && (
-                                    <li className="flex items-center gap-2">
-                                        <svg className="w-4 h-4 text-amber-400 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
+                                    <li className="flex items-start gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-mail h-4 w-4 shrink-0 text-sky-300">
+                                            <rect width="20" height="16" x="2" y="4" rx="2" />
+                                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                                         </svg>
-                                        <span>{supportEmail}</span>
+                                        <a href={`mailto:${supportEmail}`} className="text-sky-100 transition hover:text-sky-300">
+                                            {supportEmail}
+                                        </a>
                                     </li>
                                 )}
-                                <li className="flex items-center gap-2">
-                                    <svg className="w-4 h-4 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 12 3.269 3.125A59.769 59.769 0 0 1 21.485 12 59.768 59.768 0 0 1 3.27 20.875L5.999 12Zm0 0h7.5" />
+                                <li className="flex items-start gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-map-pin h-4 w-4 shrink-0 text-sky-300">
+                                        <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
+                                        <circle cx="12" cy="10" r="3" />
                                     </svg>
-                                    <a href={telegramGroup} target="_blank" className="hover:text-blue-400 transition-colors">Grup Telegram</a>
+                                    <a href={telegramGroup} target="_blank" rel="noopener noreferrer" className="text-sky-100 transition hover:text-sky-300">
+                                        Grup Telegram Resmi
+                                    </a>
                                 </li>
                             </ul>
                         </div>
+                        <div>
+                            <h3 className="mb-4 text-lg font-bold text-sky-300">Newsletter</h3>
+                            <p className="mb-3 text-sm text-sky-100">Dapatkan penawaran terbaru langsung di email Anda</p>
+                            <div className="flex">
+                                <input placeholder="Email Anda" className="flex-1 rounded-l-lg bg-sky-700 px-3 py-2 text-sm text-white placeholder-sky-300 focus:outline-none" type="email" />
+                                <button className="rounded-r-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-sky-500">Kirim</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div className="border-t border-gray-800 py-4">
-                    <p className="text-center text-xs text-gray-500">
-                        &copy; {new Date().getFullYear()} {websiteName}. All rights reserved.
-                    </p>
+                    <div className="my-8 border-t border-sky-700" />
+                    <div className="flex flex-col items-center justify-between gap-4 text-center text-sm text-sky-200 md:flex-row">
+                        <p>{websiteName} &copy; {new Date().getFullYear()} All rights reserved.</p>
+                        <div className="flex gap-4">
+                            <a href="#" className="transition hover:text-sky-300">Privacy Policy</a>
+                            <a href="#" className="transition hover:text-sky-300">Terms of Service</a>
+                        </div>
+                    </div>
                 </div>
             </footer>
 

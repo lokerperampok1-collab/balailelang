@@ -16,8 +16,9 @@ class OrderController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'nullable|email|max:255',
+            'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
+            'password' => 'required|string|min:6|confirmed',
             'shipping_address' => 'required|string',
             'province' => 'nullable|string|max:100',
             'city' => 'nullable|string|max:100',
@@ -25,12 +26,24 @@ class OrderController extends Controller
             'village' => 'nullable|string|max:100',
             'postal_code' => 'nullable|string|max:10',
             'notes' => 'nullable|string',
+            'courier' => 'nullable|string',
+            'payment' => 'nullable|string',
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.quantity' => 'required|integer|min:1',
         ]);
 
         $order = DB::transaction(function () use ($validated, $request) {
+            // Create or update user
+            $user = \App\Models\User::firstOrCreate(
+                ['email' => $validated['email']],
+                [
+                    'name' => $validated['name'],
+                    'phone' => $validated['phone'],
+                    'password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
+                ]
+            );
+
             $totalPrice = 0;
             $orderItems = [];
 
@@ -48,10 +61,10 @@ class OrderController extends Controller
             }
 
             $order = Order::create([
-                'user_id' => $request->user()?->id,
+                'user_id' => $user->id,
                 'order_code' => Order::generateOrderCode(),
                 'name' => $validated['name'],
-                'email' => $validated['email'] ?? null,
+                'email' => $validated['email'],
                 'phone' => $validated['phone'],
                 'shipping_address' => $validated['shipping_address'],
                 'province' => $validated['province'] ?? null,
@@ -60,7 +73,7 @@ class OrderController extends Controller
                 'village' => $validated['village'] ?? null,
                 'postal_code' => $validated['postal_code'] ?? null,
                 'total_price' => $totalPrice,
-                'payment_method' => 'whatsapp_transfer',
+                'payment_method' => $validated['payment'] ?? 'transfer',
                 'status' => 'pending',
                 'notes' => $validated['notes'] ?? null,
             ]);
@@ -128,7 +141,35 @@ class OrderController extends Controller
             . "Detail Barang Belanjaan:\n"
             . $itemLines . "\n"
             . "Total Harga Tebus: {$formattedTotal}\n"
-            . "Metode Pembayaran: Transfer Bank Manual\n\n"
+            . "Metode Pembayaran: {$order->payment_method}\n\n"
             . "Mohon segera diproses dan dikirimkan instruksi nomor rekening tujuannya. Terima kasih!";
+    }
+
+    public function uploadProof(Request $request)
+    {
+        $request->validate([
+            'order_code' => 'required|exists:orders,order_code',
+            'proof' => 'required|image|mimes:jpeg,png,jpg|max:5120', // Max 5MB
+        ]);
+
+        $order = Order::where('order_code', $request->order_code)->firstOrFail();
+
+        if ($request->hasFile('proof')) {
+            $path = $request->file('proof')->store('proofs', 'public');
+            $order->update([
+                'payment_proof' => '/storage/' . $path,
+                'status' => 'payment_verifying',
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Bukti pembayaran berhasil diunggah. Admin akan segera memverifikasi pesanan Anda.'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Gagal mengunggah bukti pembayaran.'
+        ], 400);
     }
 }
